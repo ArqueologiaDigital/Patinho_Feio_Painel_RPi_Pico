@@ -53,12 +53,7 @@ SWITCH_COLUMNS = [Pin(n, Pin.OUT) for n in [10, 11, 12, 13, 14, 15]]
 
 spi = SPI(0,sck=Pin(2),mosi=Pin(3))
 cs = Pin(5, Pin.OUT)
-
 display = max7219.Matrix8x8(spi, cs, 2)
-
-display.brightness(1)   # 1 to 15
-display.fill(1)
-display.show()
 
 inputs = []
 old_inputs = []
@@ -69,6 +64,7 @@ for row in range(4):
 leds = []
 for row in range(8):
     leds.append([0] * 16)
+    
 
 def printer_writeByte(c):
     while digitalRead(CENTRONICS_BUSY) == HIGH: # wait for busy to go low
@@ -277,8 +273,10 @@ def CI(value):
 def RE(value):
     global _RE
     _RE = value
+    #map_col = [11, 12, 15, 14, 9, 10, 8, 13, 9, 10, 8, 13]
+    #map_row = [ 3,  3,  3,  3, 3,  3, 3,  3, 7,  7, 7,  7]
     map_col = [11, 12, 15, 14, 9, 10, 8, 13, 9, 10, 8, 13]
-    map_row = [ 3,  3,  3,  3, 3,  3, 3,  3, 7,  7, 7,  7]
+    map_row = [ 1,  1,  1,  1, 1,  1, 1,  1, 0,  0, 0,  0]
     for i in range(12):
         leds[map_row[i]][map_col[i]] = bool(value & (1 << i))
 
@@ -466,16 +464,18 @@ def register_LEDs_demo():
             value |= (1 << i)
 
     t += 0.001
-    DADOS_DO_PAINEL(value)
+    RE(value)
+    #DADOS_DO_PAINEL(value)
 
     # The address register will have a mirrored sine-wave.
     # That's why we flip the bits here:
-    RE(~value)
+    #RE(~value)
 
-    ACC(int(value/16))
-    RI(int(value/16))
-    RD(int(value/16))
+    #ACC(int(value/16))
+    #RI(int(value/16))
+    #RD(int(value/16))
 
+    return
     # And let's display an incremental count at
     # the instruction counter register:
     CI(count)
@@ -1266,24 +1266,31 @@ def send_LED_data():
     for row in range(8):
       for col in range(16):
           if leds[row][col]:
-              display.pixel(col, row, 1)
-          else:
               display.pixel(col, row, 0)
+          else:
+              display.pixel(col, row, 1)
     display.show();
 
-display.brightness(15)
-display.fill(0)
+num = 0
+def send_LED_data__DEBUG():
+    global num
+    for row in range(8):
+      for col in range(16):
+          if 8*col + row < num:
+              display.pixel(col, row, 0)
+          else:
+              display.pixel(col, row, 1)
+    display.show();
+    num += 1
+    if num > 8*16:
+        num = 0
 
-emulator_init()
-
+display.brightness(4)
+display.fill(1)
+display.show();
+    
 while True:
-    emulator_loop();
-
-    # This is the most complete blinking demo
-    # which blinks every LED in the panel:
-    # register_LEDs_demo();
-    # utime.sleep(0.1);
-
-    send_LED_data()
+    send_LED_data__DEBUG()
+    utime.sleep(0.1);
 
 
