@@ -227,106 +227,199 @@ def write_index_reg(value):
     RAM[INDEX_REG] = value
 
 
-def DADOS_DO_PAINEL(value):
-    global leds, _DADOS_DO_PAINEL
-    _DADOS_DO_PAINEL = value
-    map_col = [11, 12, 15, 14, 9, 10, 8, 13, 9, 10, 8, 13]
-    map_row = [ 0,  0,  0,  0, 0,  0, 0,  0, 2,  2, 2,  2]
+SEG_1_DP = 8
+SEG_1_A = 9
+SEG_1_B = 10
+SEG_1_C = 11
+SEG_1_D = 12
+SEG_1_E = 13
+SEG_1_F = 14
+SEG_1_G = 15
+
+DIG_1_0 = 0
+DIG_1_1 = 1
+DIG_1_2 = 2
+DIG_1_3 = 3
+DIG_1_4 = 4
+DIG_1_5 = 5
+DIG_1_6 = 6
+DIG_1_7 = 7
+
+SEG_2_DP = 0
+SEG_2_A = 1
+SEG_2_B = 2
+SEG_2_C = 3
+SEG_2_D = 4
+SEG_2_E = 5
+SEG_2_F = 6
+SEG_2_G = 7
+
+DIG_2_0 = 0
+DIG_2_1 = 1
+DIG_2_2 = 2
+DIG_2_3 = 3
+DIG_2_4 = 4
+DIG_2_5 = 5
+DIG_2_6 = 6
+DIG_2_7 = 7
+
+
+'''
+LEDS DA PCB 1/7:
+'''
+
+def RE(value):
+    '''ENDEREÇO DA MEMÓRIA'''
+    global _RE
+    _RE = value
+    #protótipo:
+    #map_col = [11, 12, 15, 14, 9, 10, 8, 13, 9, 10, 8, 13]
+    #map_row = [ 3,  3,  3,  3, 3,  3, 3,  3, 7,  7, 7,  7]
+    map_col = [SEG_1_C, SEG_1_D, SEG_1_G, SEG_1_F, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E]
+    map_row = [DIG_1_0, DIG_1_0, DIG_1_0, DIG_1_0, DIG_1_0, DIG_1_0, DIG_1_0,  DIG_1_0, DIG_1_1, DIG_1_1, DIG_1_1,  DIG_1_1]
     for i in range(12):
         leds[map_row[i]][map_col[i]] = bool(value & (1 << i))
-
-
-def VAI_UM(value):
-    global leds, _VAI_UM
-    _VAI_UM = value
-    leds[2][15] = value
-
-
-def TRANSBORDO(value):
-    global leds, _TRANSBORDO
-    _TRANSBORDO = value
-    leds[2][14] = value
-
-
-def PARADO(value):
-    global leds, _PARADO
-    # This represents that the CPU is stopped.
-    # Only a startup command ("PARTIDA") at execution modes
-    # (NORMAL, SINGLE-INST, or SINGLE-CYCLE) can restart it.
-    _PARADO = value
-    leds[2][12] = value
-
-
-def EXTERNO(value):
-    global leds, _EXTERNO
-    # This represents that the CPU is stopped
-    # waiting for an interrupt from an external device.
-    _EXTERNO = value
-    leds[2][11] = value
 
 
 def CI(value):
+    '''ENDEREÇO DA INSTRUÇÃO'''
     global _CI
     _CI = value
-    map_col = [14, 15, 12, 11, 13, 8, 10, 9, 14, 15, 12, 11]
-    map_row = [ 7,  7,  7,  7,  1, 1,  1, 1,  1,  1,  1,  1]
+    #protótipo
+    #map_col = [14, 15, 12, 11, 13, 8, 10, 9, 14, 15, 12, 11]
+    #map_row = [ 7,  7,  7,  7,  1, 1,  1, 1,  1,  1,  1,  1]
+    map_col = [SEG_1_C, SEG_1_D, SEG_1_G, SEG_1_F, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E]
+    map_row = [DIG_1_2, DIG_1_2, DIG_1_2, DIG_1_2, DIG_1_2, DIG_1_2, DIG_1_2,  DIG_1_2, DIG_1_1, DIG_1_1, DIG_1_1,  DIG_1_1]
     for i in range(12):
         leds[map_row[i]][map_col[i]] = bool(value & (1 << i))
 
 
-def RE(value):
-    global _RE
-    _RE = value
-    map_col = [11, 12, 15, 14, 9, 10, 8, 13, 9, 10, 8, 13]
-    map_row = [ 3,  3,  3,  3, 3,  3, 3,  3, 7,  7, 7,  7]
+def DADOS_DO_PAINEL(value):
+    '''DADOS DO PAINEL'''
+    global leds, _DADOS_DO_PAINEL
+    _DADOS_DO_PAINEL = value
+    #protótipo:
+    #map_col = [11, 12, 15, 14, 9, 10, 8, 13, 9, 10, 8, 13]
+    #map_row = [ 0,  0,  0,  0, 0,  0, 0,  0, 2,  2, 2,  2]
+    map_col = [SEG_1_C, SEG_1_D, SEG_1_G, SEG_1_F, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E]
+    map_row = [DIG_1_3, DIG_1_3, DIG_1_3, DIG_1_3, DIG_1_3, DIG_1_3, DIG_1_3,  DIG_1_3, DIG_1_4, DIG_1_4, DIG_1_4,  DIG_1_4]
     for i in range(12):
         leds[map_row[i]][map_col[i]] = bool(value & (1 << i))
 
 
-def RD(value):
-    global _RD
-    _RD = value
-    map_col = [11, 12, 15, 14, 9, 10, 8, 13]
-    map_row = [ 4,  4,  4,  4, 4,  4, 4,  4]
+def TRANSBORDO(value):
+    '''TRANSBORDO'''
+    global leds, _TRANSBORDO
+    _TRANSBORDO = value
+    leds[DIG_1_4][SEG_1_F] = value
+
+
+def VAI_UM(value):
+    '''VAI UM'''
+    global leds, _VAI_UM
+    _VAI_UM = value
+    leds[DIG_1_4][SEG_1_G] = value
+
+
+'''
+LEDS DA PCB 2/7:
+'''
+
+def ACC(value):
+    '''ACUMULADOR'''
+    global _ACC
+    _ACC = value
+    #protótipo:
+    #map_col = [11, 12, 15, 14, 9, 10, 8, 13]
+    #map_row = [ 5,  5,  5,  5, 5,  5, 5,  5]
+    map_col = [SEG_1_C, SEG_1_D, SEG_1_G, SEG_1_F, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E]
+    map_row = [DIG_1_5, DIG_1_5, DIG_1_5, DIG_1_5, DIG_1_5, DIG_1_5, DIG_1_5,  DIG_1_5]
     for i in range(8):
         leds[map_row[i]][map_col[i]] = bool(value & (1 << i))
 
 
 def RI(value):
+    '''CÓDIGO DE INSTRUÇÃO'''
     global _RI
     _RI = value
-    map_col = [11, 12, 15, 14, 9, 10, 8, 13]
-    map_row = [ 6,  6,  6,  6, 6,  6, 6,  6]
+    #protótipo:
+    #map_col = [11, 12, 15, 14, 9, 10, 8, 13]
+    #map_row = [ 6,  6,  6,  6, 6,  6, 6,  6]
+    map_col = [SEG_1_C, SEG_1_D, SEG_1_G, SEG_1_F, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E]
+    map_row = [DIG_1_6, DIG_1_6, DIG_1_6, DIG_1_6, DIG_1_6, DIG_1_6, DIG_1_6,  DIG_1_6]
     for i in range(8):
         leds[map_row[i]][map_col[i]] = bool(value & (1 << i))
 
 
-def ACC(value):
-    global _ACC
-    _ACC = value
-    map_col = [11, 12, 15, 14, 9, 10, 8, 13]
-    map_row = [ 5,  5,  5,  5, 5,  5, 5,  5]
+def RD(value):
+    '''DADOS DA MEMÓRIA'''
+    global _RD
+    _RD = value
+    #protótipo:
+    #map_col = [11, 12, 15, 14, 9, 10, 8, 13]
+    #map_row = [ 4,  4,  4,  4, 4,  4, 4,  4]
+    map_col = [SEG_1_C, SEG_1_D, SEG_1_G, SEG_1_F, SEG_1_A, SEG_1_B, SEG_1_DP, SEG_1_E]
+    map_row = [DIG_1_7, DIG_1_7, DIG_1_7, DIG_1_7, DIG_1_7, DIG_1_7, DIG_1_7,  DIG_1_7]
     for i in range(8):
         leds[map_row[i]][map_col[i]] = bool(value & (1 << i))
 
+
+'''
+LEDS DA PCB 3/7:
+'''
 
 def FASE(value):
+    '''FASE'''
     global _FASE
     _FASE = value
-    map_col = [3, 5, 6, 0, 4, 7, 1]
-    map_row = [0, 0, 0, 0, 0, 0, 0]
+    #protótipo:
+    #map_col = [3, 5, 6, 0, 4, 7, 1]
+    #map_row = [0, 0, 0, 0, 0, 0, 0]
+    map_col = [SEG_2_A, SEG_2_F, SEG_2_G, SEG_2_D, SEG_2_C, SEG_2_B, SEG_2_E]
+    map_row = [DIG_2_0, DIG_2_0, DIG_2_0, DIG_2_0, DIG_2_0, DIG_2_0, DIG_2_0]
     for i in range(7):
         leds[map_row[i]][map_col[i]] = (_FASE == i+1)
 
 
+def PARADO(value):
+    '''PARADO'''
+    global leds, _PARADO
+    # This represents that the CPU is stopped.
+    # Only a startup command ("PARTIDA") at execution modes
+    # (NORMAL, SINGLE-INST, or SINGLE-CYCLE) can restart it.
+    _PARADO = value
+    leds[DIG_1_4][SEG_1_D] = value
+
+
+def EXTERNO(value):
+    '''EXTERNO'''
+    global leds, _EXTERNO
+    # This represents that the CPU is stopped
+    # waiting for an interrupt from an external device.
+    _EXTERNO = value
+    leds[DIG_1_4][SEG_1_C] = value
+
+
+'''
+LEDS DA PCB 5/7:
+'''
+
 def MODO(value):
+    '''MODO'''
     global _MODO
     _MODO = value
-    map_col = [3, 5, 6, 0, 4, 7]
-    map_row = [2, 2, 2, 2, 2, 2]
+    #protótipo:
+    #map_col = [3, 5, 6, 0, 4, 7]
+    #map_row = [2, 2, 2, 2, 2, 2]
+    map_col = [SEG_2_B, SEG_2_A, SEG_2_F, SEG_2_G, SEG_2_D, SEG_2_C]
+    map_row = [DIG_2_1, DIG_2_1, DIG_2_1, DIG_2_1, DIG_2_1, DIG_2_1]
     for i in range(6):
         leds[map_row[i]][map_col[i]] = (_MODO == i+1)
 
+
+'''
+LEDS DA PCB 6/7:
+'''
 
 def LED_ESPERA(value):
     # I think this button did not really have a lamp
@@ -341,6 +434,8 @@ def LED_INTERRUPCAO(value):
 def LED_PREPARACAO(value):
     # I think this button did not really have a lamp
     pass
+
+
 
 
 def reset_CPU():
@@ -1166,6 +1261,17 @@ def emulator_loop():
     #    printer_writeByte(Serial.read())
 
 
+INPUT_ROW_A = 0
+INPUT_ROW_B = 1
+INPUT_ROW_C = 2
+INPUT_ROW_D = 3
+
+INPUT_COL_1 = 0
+INPUT_COL_2 = 1
+INPUT_COL_3 = 2
+INPUT_COL_4 = 3
+INPUT_COL_5 = 4
+INPUT_COL_6 = 5
 
 def wait_for_buttons_release():
     send_LED_data()
@@ -1176,13 +1282,13 @@ def wait_for_buttons_release():
 
         # MODE push-buttons:
         for i in range(6):
-            if inputs[3][i]:
+            if inputs[INPUT_ROW_D][i]:
                 pressed = True
 
         # push-buttons for:
         # PARTIDA / INTERRUPÇÃO / ESPERA / PREPARAÇÃO
         for i in range(4):
-            if inputs[2][i]:
+            if inputs[INPUT_ROW_C][i]:
                 pressed = True
 
 
@@ -1195,35 +1301,36 @@ def read_inputs():
     # read the toggle switches and update DADOS_DO_PAINEL
     dados = 0
     for col in range(6):
-        if inputs[1][col]: dados |= (1 << col)
-        if inputs[0][col]: dados |= (1 << (col+6))
+        if not inputs[INPUT_ROW_B][col]: dados |= (1 << col)
+        if not inputs[INPUT_ROW_A][col]: dados |= (1 << (col+6))
 
     DADOS_DO_PAINEL(dados)
 
     # when a mode button is pressed, set the corresponding mode:
     for col in range(6):
-        if (inputs[3][col]):
+        if (inputs[INPUT_ROW_D][col]):
             MODO(6-col)
 
     # chaves de modos de memória:
-    enderecamento_sequencial = inputs[2][4]
-    memoria_protegida = inputs[2][5]
+    enderecamento_sequencial = not inputs[INPUT_ROW_C][INPUT_COL_5]
+    memoria_protegida = not inputs[INPUT_ROW_C][INPUT_COL_6]
 
-    # botão "PREPARAÇÂO":
-    if inputs[2][0]:
-        reset_CPU()
 
     # botão "ESPERA":
-    if inputs[2][3]:
+    if inputs[INPUT_ROW_C][INPUT_COL_4]:
         espera()
 
     # botão "INTERRUPÇÂO"
-    if inputs[2][2]:
+    if inputs[INPUT_ROW_C][INPUT_COL_3]:
         interrupcao()
 
     # botão "PARTIDA":
-    if inputs[2][1]:
+    if inputs[INPUT_ROW_C][INPUT_COL_2]:
          partida()
+
+    # botão "PREPARAÇÂO":
+    if inputs[INPUT_ROW_C][INPUT_COL_1]:
+        reset_CPU()
 
 
 def espera():
